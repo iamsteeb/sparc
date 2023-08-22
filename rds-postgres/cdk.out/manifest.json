@@ -1,0 +1,310 @@
+{
+  "version": "32.0.0",
+  "artifacts": {
+    "RdsPostgresStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RdsPostgresStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RdsPostgresStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://145423545297/us-west-2",
+      "properties": {
+        "templateFile": "RdsPostgresStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::145423545297:role/cdk-hnb659fds-deploy-role-145423545297-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::145423545297:role/cdk-hnb659fds-cfn-exec-role-145423545297-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-145423545297-us-west-2/a3b36b76c54b36e0c6a88af9479c006ffd245e18b8c72c0f9b6bdde1e26c8960.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RdsPostgresStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::145423545297:role/cdk-hnb659fds-lookup-role-145423545297-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RdsPostgresStack.assets"
+      ],
+      "metadata": {
+        "/RdsPostgresStack/car-info-bucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "carinfobucketCDC1325C"
+          }
+        ],
+        "/RdsPostgresStack/DeployWebsite/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeployWebsiteAwsCliLayer17DBC421"
+          }
+        ],
+        "/RdsPostgresStack/DeployWebsite/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeployWebsiteCustomResourceD116527B"
+          }
+        ],
+        "/RdsPostgresStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/RdsPostgresStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/RdsPostgresStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcCBA53F8B"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet1RouteTable4789F9D4"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet1RouteTableAssociation3C558A91"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet1DefaultRouteEE1578C5"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet2RouteTable25E8CD9D"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet2RouteTableAssociationCAA258F8"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet2DefaultRoute9569C351"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet3RouteTableAssociation7307D016"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcPublicSubnet3DefaultRoute166C87AA"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet1Subnet367BEA97"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet1RouteTable210D1FD3"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet1RouteTableAssociation5E84DBFA"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet2SubnetBFBE5E46"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet2RouteTableD4E28503"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet2RouteTableAssociationFED2595A"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet3SubnetA8B42D7D"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet3RouteTableCE594FE7"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIsolatedSubnet3RouteTableAssociation8F9F42D3"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcIGW59F97FCD"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcVPCGW6C0E8D70"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-vpc/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackvpcRestrictDefaultSecurityGroupCustomResourceBCE31A24"
+          }
+        ],
+        "/RdsPostgresStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/RdsPostgresStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/RdsPostgresStack/ImportBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImportBucketBAF3A8E9"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/SubnetGroup/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsSubnetGroupC584F1C3"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsSecurityGroupB18CBF60"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsS3ImportRole06097A1A"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsS3ImportRoleDefaultPolicy63A79C8F"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/Secret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsSecret4DFDCAF5"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/Secret/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrdsSecretAttachment8AE06D5F"
+          }
+        ],
+        "/RdsPostgresStack/RdsPostgresStack-rds/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RdsPostgresStackrds1E2F62A7"
+          }
+        ],
+        "/RdsPostgresStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RdsPostgresStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RdsPostgresStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RdsPostgresStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
