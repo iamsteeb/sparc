@@ -40,7 +40,7 @@ public class RdsPostgresStack extends Stack {
                                                 .build());
 
                 // creates rds postgres db instance
-                final DatabaseInstance rdsInstance = DatabaseInstance.Builder.create(this, id + "-rds")
+                final DatabaseInstance rdsInstance = DatabaseInstance.Builder.create(this, id + "-rdsdb")
                                 .vpc(vpc)
                                 // since subnet is isolated, this instance won't route traffic to the internet
                                 // without other resources in the VPC that are connected
