@@ -4,7 +4,7 @@ import software.constructs.Construct;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+//import java.util.List;
 
 import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
@@ -14,89 +14,89 @@ import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.s3.*;
 import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.Source;
-import software.amazon.awscdk.services.backup.*;
-import software.amazon.awscdk.services.dynamodb.*;
+// import software.amazon.awscdk.services.backup.*;
+// import software.amazon.awscdk.services.dynamodb.*;
 
 public class RdsPostgresStack extends Stack {
-    public RdsPostgresStack(final Construct scope, final String id) {
-        this(scope, id, null);
-    }
+        public RdsPostgresStack(final Construct scope, final String id) {
+                this(scope, id, null);
+        }
 
-    public RdsPostgresStack(final Construct scope, final String id, final StackProps props) {
-        super(scope, id, props);
+        public RdsPostgresStack(final Construct scope, final String id, final StackProps props) {
+                super(scope, id, props);
 
-        // call to create s3 and upload an s3 to it
-        Bucket carInfoBucket = addCsv("/Users/ntashi/sparc/rds-postgres/csvfile");
+                // call to create s3 and upload an s3 to it
+                Bucket carInfoBucket = addCsv("/Users/ntashi/sparc/rds-postgres/csvfile");
 
-        // creates vpc to pass to db create
-        final Vpc vpc = Vpc.Builder.create(this, id + "-vpc")
-                .natGateways(0) // Do not create any gateways
-                .build();
+                // creates vpc to pass to db create
+                final Vpc vpc = Vpc.Builder.create(this, id + "-vpc")
+                                .natGateways(0) // Do not create any gateways
+                                .build();
 
-        // creates db engine to pass to db create
-        final IInstanceEngine rdsInstanceEngine = DatabaseInstanceEngine.postgres(
-                PostgresInstanceEngineProps.builder()
-                        .version(PostgresEngineVersion.VER_15_3)
-                        .build());
+                // creates db engine to pass to db create
+                final IInstanceEngine rdsInstanceEngine = DatabaseInstanceEngine.postgres(
+                                PostgresInstanceEngineProps.builder()
+                                                .version(PostgresEngineVersion.VER_15_3)
+                                                .build());
 
-        // creates rds postgres db instance
-        final DatabaseInstance rdsInstance = DatabaseInstance.Builder.create(this, id + "-rds")
-                .vpc(vpc)
-                // since subnet is isolated, this instance won't route traffic to the internet
-                // without other resources in the VPC that are connected
-                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
-                .instanceType(software.amazon.awscdk.services.ec2.InstanceType.of(
-                        InstanceClass.BURSTABLE3,
-                        InstanceSize.MICRO))
-                .engine(rdsInstanceEngine)
-                .instanceIdentifier(id + "-rds")
-                .removalPolicy(RemovalPolicy.DESTROY) // makes sure 'cdk destroy' removes all artifacts
-                .s3ImportBuckets(Arrays.asList(new Bucket(this, "ImportBucket", BucketProps.builder() //
-                        .removalPolicy(RemovalPolicy.DESTROY)
-                        .build())))
-                .build();
+                // creates rds postgres db instance
+                final DatabaseInstance rdsInstance = DatabaseInstance.Builder.create(this, id + "-rds")
+                                .vpc(vpc)
+                                // since subnet is isolated, this instance won't route traffic to the internet
+                                // without other resources in the VPC that are connected
+                                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
+                                .instanceType(software.amazon.awscdk.services.ec2.InstanceType.of(
+                                                InstanceClass.BURSTABLE3,
+                                                InstanceSize.MICRO))
+                                .engine(rdsInstanceEngine)
+                                .instanceIdentifier(id + "-rds")
+                                .removalPolicy(RemovalPolicy.DESTROY) // makes sure 'cdk destroy' removes all artifacts
+                                .s3ImportBuckets(Arrays.asList(new Bucket(this, "ImportBucket", BucketProps.builder() //
+                                                .removalPolicy(RemovalPolicy.DESTROY)
+                                                .build())))
+                                .build();
 
-        // add lambdas here [SDK]
-        // allocate lambra functions https://hevodata.com/learn/aws-cdk-lambda/ [TO-DO]
+                // add lambdas here [SDK]
+                // allocate lambra functions https://hevodata.com/learn/aws-cdk-lambda/ [TO-DO]
 
-        // back up of rds db [SDK]
+                // back up of rds db [SDK]
 
-        // read s3 backup into new dynamodb instance [SDK]
-        // instantiate new dynamodb instance [TO-DO]
-        Table dynamoTable = Table.Builder.create(this, "Table")
-                .partitionKey(Attribute.builder()
-                        .name("id")
-                        .type(AttributeType.STRING)
-                        .build())
-                .billingMode(BillingMode.PAY_PER_REQUEST)
-                .removalPolicy(RemovalPolicy.DESTROY)
-                .sortKey(SortKey.builder()
-                        .name("DOL")
-                        .type(AttributeType.NUMBER)
-                        .build())
-                .pointInTimeRecovery(true)
-                .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
-                .build();
+                // read s3 backup into new dynamodb instance [SDK]
+                // instantiate new dynamodb instance [TO-DO]
+                // Table dynamoTable = Table.Builder.create(this, "Table")
+                // .partitionKey(Attribute.builder()
+                // .name("id")
+                // .type(AttributeType.STRING)
+                // .build())
+                // .billingMode(BillingMode.PAY_PER_REQUEST)
+                // .removalPolicy(RemovalPolicy.DESTROY)
+                // .sortKey(SortKey.builder()
+                // .name("DOL")
+                // .type(AttributeType.NUMBER)
+                // .build())
+                // .pointInTimeRecovery(true)
+                // .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
+                // .build();
 
-        // table.addLocalSecondaryIndex(LocalSecondaryIndexProps.builder()
-        // .indexName("statusIndex")
-        // .sortKey(SortKey.builder()
-        // .name("status")
-        // .type(AttributeType.STRING)
-        // .build())
-        // .projectionType(ProjectionType.ALL)
-        // .build());
-    }
+                // table.addLocalSecondaryIndex(LocalSecondaryIndexProps.builder()
+                // .indexName("statusIndex")
+                // .sortKey(SortKey.builder()
+                // .name("status")
+                // .type(AttributeType.STRING)
+                // .build())
+                // .projectionType(ProjectionType.ALL)
+                // .build());
+        }
 
-    /*
-     * Creates bucket and loads given csv into S3; returns such bucket
-     */
-    private Bucket addCsv(String filepath) {
-        Bucket carInfoBucket = Bucket.Builder.create(this, "car-info-bucket").build();
-        BucketDeployment deployment = BucketDeployment.Builder.create(this, "DeployWebsite")
-                .sources(Collections.singletonList(Source.asset(filepath)))
-                .destinationBucket(carInfoBucket)
-                .build();
-        return carInfoBucket;
-    }
+        /*
+         * Creates bucket and loads given csv into S3; returns such bucket
+         */
+        private Bucket addCsv(String filepath) {
+                Bucket carInfoBucket = Bucket.Builder.create(this, "car-info-bucket").build();
+                BucketDeployment deployment = BucketDeployment.Builder.create(this, "DeployWebsite")
+                                .sources(Collections.singletonList(Source.asset(filepath)))
+                                .destinationBucket(carInfoBucket)
+                                .build();
+                return carInfoBucket;
+        }
 }
