@@ -97,31 +97,23 @@ public class Handler {
 
         // final AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
 
-        try {
-            S3Object obj = s3Client.getObject(bucketName, keyName); // get csv from s3
-            S3ObjectInputStream s3is = obj.getObjectContent(); // get the content from the csv
-                                                                      // 
-                                                                      // 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(); // initialize byte array stream necessary for blob-format insert
-            request.setReportOutputStream(baos); // request writes into output stream
-            byte[] byte_buf = baos.toByteArray(); // convert to byte array
-            // byte[] read_buf = new byte[1024];
-            // int read_len = 0;
-            // read_len = s3is.read(read_buf)) > 0) {
-            //     baos.write(read_buf, 0, read_len);
-            // }
-            s3is.close();
-            baos.close();
-        } catch (AmazonServiceException e) {
-            System.err.println(e.getErrorMessage());
-            System.exit(1);
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        } catch (IOException e) {
+        S3Object obj = s3Client.getObject(bucketName, keyName); // get csv from s3
+        S3ObjectInputStream s3is = obj.getObjectContent(); // get the content from the csv
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(); // initialize byte array stream
+                                                            
+        request.setReportOutputStream(baos); // request writes into output stream
+        byte[] byte_buf = baos.toByteArray(); // convert to byte array
+        // byte[] read_buf = new byte[1024];
+        // int read_len = 0;
+        // read_len = s3is.read(read_buf)) > 0) {
+        // baos.write(read_buf, 0, read_len);
+        // }
 
-         
-        }
+        Blob blob = new connection.createBlob(); 
+        blob.setBytes(1, byte_buf); // blob-format insert
+        
+        s3is.close();
+        baos.close();
     }
 
     // RELIC
@@ -162,8 +154,4 @@ public class Handler {
             System.exit(1);
         }
     }
-
-    
-    
-
-    
+}
