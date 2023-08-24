@@ -1,16 +1,16 @@
 package org.example;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import org.omg.CORBA.Request;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Blob;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.*;
@@ -108,60 +108,44 @@ public class Handler {
      * object-to-insert-records-in-a-database
      */
     public void streamS3ToRds(DBInstance targetDatabase, Bucket s3) {
-        String selectQuery = "SELECT * FROM S3Object";
+        // String selectQuery = "SELECT * FROM S3Object";
         final String bucketName = s3.name();
         final String objectKey = "carInfoThousandRows.csv";
 
         // ~~GET DATA FROM S3~~
         // Request to filter the contents of an Amazon S3 object
-        SelectObjectContentRequest selectRequest = SelectObjectContentRequest.builder()
+        GetObjectRequest getObject = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(objectKey)
-                .expressionType("SQL")
-                .inputSerialization(s -> s.csv(scs -> scs.recordDelimiter("\n").fieldDelimiter(",")))
-                .outputSerialization(s -> s.csv(scs -> scs.recordDelimiter("\n")))
-                .expression(selectQuery)
                 .build();
-
-        SelectObjectContentResponse response = s3Client1.selectObjectContent(selectRequest);
-        ResponseInputStream<software.amazon.awssdk.services.s3.model.SelectObjectContentEventStream> responseInputStream = response
-                .payload().getRecordsInputStream();
+        ResponseInputStream<GetObjectResponse> responseInputStream = s3Client1.getObject(getObject);
         List<String[]> parsedData = parseCSV(responseInputStream);
 
         // ~~IMPORT DATA TO RDS~~
-        // Generate and execute insert queries
-        for (String[] rowData : parsedData) {
-            String insertQuery = generateInsertQuery(rowData);
-            ExecuteStatementRequest executeRequest = ExecuteStatementRequest
-                    .builder()
-                    .database(targetDatabase.dbName())
-                    .sql(insertQuery)
-                    .build();
+        // Generate and execute 'insert' queries
+        String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
+                + targetDatabase.dbName();
+        // should be:
+        // jdbc:postgresql://t16-db1.cqewj0ljgvkk.us-east-2.rds.amazonaws.com:3306/t16-db1
+        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
+            for (String[] rowData : parsedData) {
+                String insertQuery = generateInsertQuery(rowData);
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeQuery(insertQuery);
+                } catch (SQLException e) {
+                    // add exception handling
+                    continue;
+                }
+                connection.close();
+            }
+        } catch (SQLException e) {
+            // add exception handling
         }
-
-        // S3ObjectInputStream s3is = obj.getObjectContent(); // get the content from
-        // the csv
-        // ByteArrayOutputStream baos = new ByteArrayOutputStream(); // initialize byte
-        // array stream
-
-        // request.setReportOutputStream(baos); // request writes into output stream
-        // byte[] byte_buf = baos.toByteArray(); // convert to byte array
-        // byte[] read_buf = new byte[1024];
-        // int read_len = 0;
-        // read_len = s3is.read(read_buf)) > 0) {
-        // baos.write(read_buf, 0, read_len);
-        // }
-
-        // Blob blob = new connection.createBlob();
-        // blob.setBytes(1, byte_buf); // blob-format insert
-
-        // s3is.close();
-        // baos.close();
     }
 
     // Parse CSV data from the ResponseInputStream
     private static List<String[]> parseCSV(
-            ResponseInputStream<software.amazon.awssdk.services.s3.model.SelectObjectContentEventStream> inputStream) {
+            ResponseInputStream<GetObjectResponse> inputStream) {
         List<String[]> data = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
@@ -180,7 +164,7 @@ public class Handler {
     private static String generateInsertQuery(String[] rowData) {
         String columns = "column1, column2, column3"; // Adjust column names
         String values = "'" + rowData[0] + "', '" + rowData[1] + "', '" + rowData[2] + "'"; // Adjust values
-        return "INSERT INTO your_table_name (" + columns + ") VALUES (" + values + ")";
+        return "INSERT INTO carInfo (" + columns + ") VALUES (" + values + ")";
     }
 
     // RELIC
