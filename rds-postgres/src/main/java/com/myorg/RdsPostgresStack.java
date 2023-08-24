@@ -14,8 +14,8 @@ import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.s3.*;
 import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.Source;
-// import software.amazon.awscdk.services.backup.*;
-// import software.amazon.awscdk.services.dynamodb.*;
+import software.amazon.awscdk.services.backup.*;
+import software.amazon.awscdk.services.dynamodb.*;
 
 public class RdsPostgresStack extends Stack {
         public RdsPostgresStack(final Construct scope, final String id) {
@@ -57,26 +57,21 @@ public class RdsPostgresStack extends Stack {
                                 .build();
 
                 // add lambdas here [SDK]
-                // allocate lambra functions https://hevodata.com/learn/aws-cdk-lambda/ [TO-DO]
+                // allocate lambda functions https://hevodata.com/learn/aws-cdk-lambda/ [TO-DO]
 
                 // back up of rds db [SDK]
 
                 // read s3 backup into new dynamodb instance [SDK]
                 // instantiate new dynamodb instance [TO-DO]
-                // Table dynamoTable = Table.Builder.create(this, "Table")
-                // .partitionKey(Attribute.builder()
-                // .name("id")
-                // .type(AttributeType.STRING)
-                // .build())
-                // .billingMode(BillingMode.PAY_PER_REQUEST)
-                // .removalPolicy(RemovalPolicy.DESTROY)
-                // .sortKey(SortKey.builder()
-                // .name("DOL")
-                // .type(AttributeType.NUMBER)
-                // .build())
-                // .pointInTimeRecovery(true)
-                // .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
-                // .build();
+                Table dynamoTable = Table.Builder.create(this, "dynamoTable")
+                        .partitionKey(Attribute.builder()
+                        .name("DOL"))
+                        .type(AttributeType.STRING)
+                        .billingMode(BillingMode.PAY_PER_REQUEST)
+                        .removalPolicy(RemovalPolicy.DESTROY)
+                        .pointInTimeRecovery(true)
+                        .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
+                        .build()
 
                 // table.addLocalSecondaryIndex(LocalSecondaryIndexProps.builder()
                 // .indexName("statusIndex")
