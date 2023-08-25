@@ -4,7 +4,7 @@ import software.constructs.Construct;
 
 import java.util.Arrays;
 import java.util.Collections;
-//import java.util.List;
+import java.util.Map;
 
 import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
@@ -14,7 +14,6 @@ import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.s3.*;
 import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.Source;
-import software.amazon.awscdk.services.backup.*;
 import software.amazon.awscdk.services.dynamodb.*;
 
 public class RdsPostgresStack extends Stack {
@@ -25,7 +24,7 @@ public class RdsPostgresStack extends Stack {
         public RdsPostgresStack(final Construct scope, final String id, final StackProps props) {
                 super(scope, id, props);
 
-                // call to create s3 and upload an s3 to it
+                // call to create s3 and upload an csv to it
                 Bucket carInfoBucket = addCsv("/Users/ntashi/sparc/rds-postgres/csvfile");
 
                 // creates vpc to pass to db create
@@ -50,6 +49,7 @@ public class RdsPostgresStack extends Stack {
                                                 InstanceSize.MICRO))
                                 .engine(rdsInstanceEngine)
                                 .instanceIdentifier(id + "-rds")
+                                // .credentials(Map.of("masterUsername", "masterPass"))
                                 .removalPolicy(RemovalPolicy.DESTROY) // makes sure 'cdk destroy' removes all artifacts
                                 .s3ImportBuckets(Arrays.asList(new Bucket(this, "ImportBucket", BucketProps.builder() //
                                                 .removalPolicy(RemovalPolicy.DESTROY)
@@ -63,15 +63,13 @@ public class RdsPostgresStack extends Stack {
 
                 // read s3 backup into new dynamodb instance [SDK]
                 // instantiate new dynamodb instance [TO-DO]
-                Table dynamoTable = Table.Builder.create(this, "dynamoTable")
-                        .partitionKey(Attribute.builder()
-                        .name("DOL"))
-                        .type(AttributeType.STRING)
-                        .billingMode(BillingMode.PAY_PER_REQUEST)
-                        .removalPolicy(RemovalPolicy.DESTROY)
-                        .pointInTimeRecovery(true)
-                        .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
-                        .build()
+                Table dynamoTable = Table.Builder.create(this, "car-info-dynamo")
+                                .partitionKey(Attribute.builder().name("dol").type(AttributeType.STRING).build())
+                                .billingMode(BillingMode.PAY_PER_REQUEST)
+                                .removalPolicy(RemovalPolicy.DESTROY)
+                                .pointInTimeRecovery(true)
+                                .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
+                                .build();
 
                 // table.addLocalSecondaryIndex(LocalSecondaryIndexProps.builder()
                 // .indexName("statusIndex")

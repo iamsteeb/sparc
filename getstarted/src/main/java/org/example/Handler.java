@@ -127,7 +127,7 @@ public class Handler {
                 + targetDatabase.dbName();
         // should be:
         // jdbc:postgresql://t16-db1.cqewj0ljgvkk.us-east-2.rds.amazonaws.com:3306/t16-db1
-        try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
+        try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
             for (String[] rowData : parsedData) {
                 String insertQuery = generateInsertQuery(rowData);
                 try (Statement statement = connection.createStatement()) {
