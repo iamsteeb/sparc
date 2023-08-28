@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 
-import java.io.InputStream;
+//import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,23 +13,23 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.core.sync.RequestBody;
+//import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.*;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.rds.*;
 import software.amazon.awssdk.services.rds.model.*;
-import software.amazon.awssdk.services.rdsdata.*;
-import software.amazon.awssdk.services.rdsdata.model.ExecuteStatementRequest;
-import software.amazon.awssdk.awscore.exception.*;
+//import software.amazon.awssdk.services.rdsdata.*;
+//import software.amazon.awssdk.services.rdsdata.model.ExecuteStatementRequest;
+//import software.amazon.awssdk.awscore.exception.*;
 
 public class Handler {
     private final S3Client s3Client1;
-    private final RdsClient rdsClient2;
+    private final RdsClient rdsClient1;
     private static final Logger logger = LoggerFactory.getLogger(Handler.class);
 
     public Handler() {
         s3Client1 = DependencyFactory.s3Client1();
-        rdsClient2 = DependencyFactory.rdsClient2();
+        rdsClient1 = DependencyFactory.rdsClient1();
     }
 
     public void sendRequest() {
@@ -49,14 +49,14 @@ public class Handler {
         }
 
         // Create an RDS client
-        RdsClient rdsClient = RdsClient.builder().build();
+        // RdsClient rdsClient = RdsClient.builder().build();
 
         // Example code for interacting with RDS
         String databaseId = "rdspostgresstack";
 
         // Describe RDS instances
         DescribeDbInstancesRequest describeRequest = DescribeDbInstancesRequest.builder().build();
-        DescribeDbInstancesResponse describeResponse = rdsClient2.describeDBInstances(describeRequest);
+        DescribeDbInstancesResponse describeResponse = rdsClient1.describeDBInstances(describeRequest);
 
         List<DBInstance> dbInstances = describeResponse.dbInstances();
         DBInstance targetDatabase = null;
@@ -124,7 +124,7 @@ public class Handler {
         streamS3ToRds(targetDatabase, targetBucket);
 
         s3Client1.close();
-        rdsClient.close();
+        rdsClient1.close();
     }
 
     /*

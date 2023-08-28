@@ -10,9 +10,8 @@ import software.amazon.awssdk.regions.Region;
  * The module containing all dependencies required by the {@link Handler}.
  */
 public class DependencyFactory {
-    final static Region r1 = Region.US_EAST_1;
-    final static Region r2 = Region.US_EAST_2;
-    final static Region r3 = Region.US_WEST_1;
+    final static Region r1 = Region.US_WEST_1;
+    final static Region r2 = Region.US_WEST_2;
 
     private DependencyFactory() {
     }
@@ -23,7 +22,7 @@ public class DependencyFactory {
     public static S3Client s3Client1() {
         return S3Client.builder()
                 .httpClientBuilder(ApacheHttpClient.builder())
-                .region(r3)
+                .region(r1)
                 .build();
     }
 
@@ -40,9 +39,9 @@ public class DependencyFactory {
     /**
      * @return an instance of rdsClient in region us east 1
      */
-    public static RdsClient rdsClient2() {
+    public static RdsClient rdsClient1() {
         return RdsClient.builder()
-                .region(r3)
+                .region(r1)
                 .build();
     }
 }

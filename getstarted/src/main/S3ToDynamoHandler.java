@@ -1,21 +1,21 @@
 package org.example;
 
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.*
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 public class S3ToDynamoHandler {
 	private final S3Client s3Client;
 	private final S3BucketSource sourceBucket;
 	private final DynamoDbClient ddbClient;
-	
+
 	public S3ToDynamoHandler(String s3SourceBucket) {
-        sourceBucket = S3BucketSource.builder()
-        		.s3Bucket(s3SourceBucket)
-        		.build();
-        ddbClient = DynamoDbClient.builder()
-        		.region(Region.US_EAST_1)
-        		.build();
-    }
+		sourceBucket = S3BucketSource.builder()
+				.s3Bucket(s3SourceBucket)
+				.build();
+		ddbClient = DynamoDbClient.builder()
+				.region(Region.US_EAST_1)
+				.build();
+	}
 
 	public void importTable() {
 		TableCreationParameters params = TableCreationParameters.builder()
