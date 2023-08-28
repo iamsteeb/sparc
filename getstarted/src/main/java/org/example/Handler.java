@@ -6,7 +6,8 @@ import java.util.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,9 +24,12 @@ import software.amazon.awssdk.awscore.exception.*;
 
 public class Handler {
     private final S3Client s3Client1;
+    private final RdsClient rdsClient2;
+    private static final Logger logger = LoggerFactory.getLogger(Handler.class);
 
     public Handler() {
         s3Client1 = DependencyFactory.s3Client1();
+        rdsClient2 = DependencyFactory.rdsClient2();
     }
 
     public void sendRequest() {
@@ -52,7 +56,7 @@ public class Handler {
 
         // Describe RDS instances
         DescribeDbInstancesRequest describeRequest = DescribeDbInstancesRequest.builder().build();
-        DescribeDbInstancesResponse describeResponse = rdsClient.describeDBInstances(describeRequest);
+        DescribeDbInstancesResponse describeResponse = rdsClient2.describeDBInstances(describeRequest);
 
         List<DBInstance> dbInstances = describeResponse.dbInstances();
         DBInstance targetDatabase = null;
@@ -86,10 +90,12 @@ public class Handler {
                 "latitude REAL" +
                 ")";
 
-        System.out.println("target db: " + targetDatabase.dbName());
-        System.out.flush();
-        System.out.println("targetBucket: " + targetBucket.name());
-        System.out.flush();
+        // System.out.println("target db: " + targetDatabase.dbName());
+        // System.out.flush();
+        // System.out.println("targetBucket: " + targetBucket.name());
+        // System.out.flush();
+        logger.debug("target db: " + targetDatabase.dbInstanceIdentifier());
+        logger.debug("targetBucket: " + targetBucket.name());
 
         // execute statement to build table in postgres
         // ExecuteStatementRequest executeStatementRequest =
@@ -100,8 +106,9 @@ public class Handler {
 
         String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
                 + targetDatabase.dbName();
-        System.out.println("JDBC: " + jdbcURL);
-        System.out.flush();
+        // System.out.println("JDBC: " + jdbcURL);
+        // System.out.flush();
+        logger.debug("JDBC: " + jdbcURL);
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
             try (Statement statement = connection.createStatement()) {
