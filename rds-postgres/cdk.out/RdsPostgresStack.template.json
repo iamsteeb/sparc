@@ -20,7 +20,7 @@
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
     "Content": {
-     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-2",
+     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-1",
      "S3Key": "e2277687077a2abf9ae1af1cc9565e6715e2ebb62f79ec53aa75a1af9298f642.zip"
     },
     "Description": "/opt/awscli/aws"
@@ -42,7 +42,7 @@
      ]
     },
     "SourceBucketNames": [
-     "cdk-hnb659fds-assets-145423545297-us-west-2"
+     "cdk-hnb659fds-assets-145423545297-us-west-1"
     ],
     "SourceObjectKeys": [
      "0cf7acbbc1ba093c14ac947678c44e93dd7e0f94dcf36a4142f664dc29254804.zip"
@@ -105,8 +105,8 @@
        ],
        "Effect": "Allow",
        "Resource": [
-        "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-2",
-        "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-2/*"
+        "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-1",
+        "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-1/*"
        ]
       },
       {
@@ -164,7 +164,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-2",
+     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-1",
      "S3Key": "9eb41a5505d37607ac419321497a4f8c21cf0ee1f9b4a6b29aa04301aea5c7fd.zip"
     },
     "Environment": {
@@ -219,8 +219,8 @@
   "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B": {
    "Type": "AWS::EC2::Subnet",
    "Properties": {
-    "AvailabilityZone": "us-west-2a",
-    "CidrBlock": "10.0.0.0/19",
+    "AvailabilityZone": "us-west-1a",
+    "CidrBlock": "10.0.0.0/18",
     "MapPublicIpOnLaunch": true,
     "Tags": [
      {
@@ -293,11 +293,53 @@
     "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/DefaultRoute"
    }
   },
+  "RdsPostgresStackvpcPublicSubnet1EIPE5BF720E": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/EIP"
+   }
+  },
+  "RdsPostgresStackvpcPublicSubnet1NATGatewayBC96B730": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "RdsPostgresStackvpcPublicSubnet1EIPE5BF720E",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "RdsPostgresStackvpcPublicSubnet1DefaultRouteEE1578C5",
+    "RdsPostgresStackvpcPublicSubnet1RouteTableAssociation3C558A91"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/NATGateway"
+   }
+  },
   "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9": {
    "Type": "AWS::EC2::Subnet",
    "Properties": {
-    "AvailabilityZone": "us-west-2b",
-    "CidrBlock": "10.0.32.0/19",
+    "AvailabilityZone": "us-west-1c",
+    "CidrBlock": "10.0.64.0/18",
     "MapPublicIpOnLaunch": true,
     "Tags": [
      {
@@ -370,24 +412,66 @@
     "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/DefaultRoute"
    }
   },
-  "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE": {
+  "RdsPostgresStackvpcPublicSubnet2EIPE9915A97": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/EIP"
+   }
+  },
+  "RdsPostgresStackvpcPublicSubnet2NATGateway946C059F": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "RdsPostgresStackvpcPublicSubnet2EIPE9915A97",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "RdsPostgresStackvpcPublicSubnet2DefaultRoute9569C351",
+    "RdsPostgresStackvpcPublicSubnet2RouteTableAssociationCAA258F8"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/NATGateway"
+   }
+  },
+  "RdsPostgresStackvpcPrivateSubnet1Subnet640B57BA": {
    "Type": "AWS::EC2::Subnet",
    "Properties": {
-    "AvailabilityZone": "us-west-2c",
-    "CidrBlock": "10.0.64.0/19",
-    "MapPublicIpOnLaunch": true,
+    "AvailabilityZone": "us-west-1a",
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
     "Tags": [
      {
       "Key": "aws-cdk:subnet-name",
-      "Value": "Public"
+      "Value": "Private"
      },
      {
       "Key": "aws-cdk:subnet-type",
-      "Value": "Public"
+      "Value": "Private"
      },
      {
       "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3"
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1"
      }
     ],
     "VpcId": {
@@ -395,16 +479,16 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/Subnet"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/Subnet"
    }
   },
-  "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC": {
+  "RdsPostgresStackvpcPrivateSubnet1RouteTableF435602C": {
    "Type": "AWS::EC2::RouteTable",
    "Properties": {
     "Tags": [
      {
       "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3"
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1"
      }
     ],
     "VpcId": {
@@ -412,59 +496,56 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTable"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/RouteTable"
    }
   },
-  "RdsPostgresStackvpcPublicSubnet3RouteTableAssociation7307D016": {
+  "RdsPostgresStackvpcPrivateSubnet1RouteTableAssociation3F64BEE7": {
    "Type": "AWS::EC2::SubnetRouteTableAssociation",
    "Properties": {
     "RouteTableId": {
-     "Ref": "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet1RouteTableF435602C"
     },
     "SubnetId": {
-     "Ref": "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet1Subnet640B57BA"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTableAssociation"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/RouteTableAssociation"
    }
   },
-  "RdsPostgresStackvpcPublicSubnet3DefaultRoute166C87AA": {
+  "RdsPostgresStackvpcPrivateSubnet1DefaultRoute29B8ED3E": {
    "Type": "AWS::EC2::Route",
    "Properties": {
     "DestinationCidrBlock": "0.0.0.0/0",
-    "GatewayId": {
-     "Ref": "RdsPostgresStackvpcIGW59F97FCD"
+    "NatGatewayId": {
+     "Ref": "RdsPostgresStackvpcPublicSubnet1NATGatewayBC96B730"
     },
     "RouteTableId": {
-     "Ref": "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet1RouteTableF435602C"
     }
    },
-   "DependsOn": [
-    "RdsPostgresStackvpcVPCGW6C0E8D70"
-   ],
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/DefaultRoute"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/DefaultRoute"
    }
   },
-  "RdsPostgresStackvpcIsolatedSubnet1Subnet367BEA97": {
+  "RdsPostgresStackvpcPrivateSubnet2Subnet2453B644": {
    "Type": "AWS::EC2::Subnet",
    "Properties": {
-    "AvailabilityZone": "us-west-2a",
-    "CidrBlock": "10.0.96.0/19",
+    "AvailabilityZone": "us-west-1c",
+    "CidrBlock": "10.0.192.0/18",
     "MapPublicIpOnLaunch": false,
     "Tags": [
      {
       "Key": "aws-cdk:subnet-name",
-      "Value": "Isolated"
+      "Value": "Private"
      },
      {
       "Key": "aws-cdk:subnet-type",
-      "Value": "Isolated"
+      "Value": "Private"
      },
      {
       "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1"
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2"
      }
     ],
     "VpcId": {
@@ -472,16 +553,16 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/Subnet"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/Subnet"
    }
   },
-  "RdsPostgresStackvpcIsolatedSubnet1RouteTable210D1FD3": {
+  "RdsPostgresStackvpcPrivateSubnet2RouteTableF7F6AF50": {
    "Type": "AWS::EC2::RouteTable",
    "Properties": {
     "Tags": [
      {
       "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1"
+      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2"
      }
     ],
     "VpcId": {
@@ -489,139 +570,36 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTable"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/RouteTable"
    }
   },
-  "RdsPostgresStackvpcIsolatedSubnet1RouteTableAssociation5E84DBFA": {
+  "RdsPostgresStackvpcPrivateSubnet2RouteTableAssociationF16CCF7C": {
    "Type": "AWS::EC2::SubnetRouteTableAssociation",
    "Properties": {
     "RouteTableId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet1RouteTable210D1FD3"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet2RouteTableF7F6AF50"
     },
     "SubnetId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet1Subnet367BEA97"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet2Subnet2453B644"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTableAssociation"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/RouteTableAssociation"
    }
   },
-  "RdsPostgresStackvpcIsolatedSubnet2SubnetBFBE5E46": {
-   "Type": "AWS::EC2::Subnet",
+  "RdsPostgresStackvpcPrivateSubnet2DefaultRoute925448E8": {
+   "Type": "AWS::EC2::Route",
    "Properties": {
-    "AvailabilityZone": "us-west-2b",
-    "CidrBlock": "10.0.128.0/19",
-    "MapPublicIpOnLaunch": false,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Isolated"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Isolated"
-     },
-     {
-      "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2"
-     }
-    ],
-    "VpcId": {
-     "Ref": "RdsPostgresStackvpcCBA53F8B"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/Subnet"
-   }
-  },
-  "RdsPostgresStackvpcIsolatedSubnet2RouteTableD4E28503": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2"
-     }
-    ],
-    "VpcId": {
-     "Ref": "RdsPostgresStackvpcCBA53F8B"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTable"
-   }
-  },
-  "RdsPostgresStackvpcIsolatedSubnet2RouteTableAssociationFED2595A": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "RdsPostgresStackvpcPublicSubnet2NATGateway946C059F"
+    },
     "RouteTableId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet2RouteTableD4E28503"
-    },
-    "SubnetId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet2SubnetBFBE5E46"
+     "Ref": "RdsPostgresStackvpcPrivateSubnet2RouteTableF7F6AF50"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTableAssociation"
-   }
-  },
-  "RdsPostgresStackvpcIsolatedSubnet3SubnetA8B42D7D": {
-   "Type": "AWS::EC2::Subnet",
-   "Properties": {
-    "AvailabilityZone": "us-west-2c",
-    "CidrBlock": "10.0.160.0/19",
-    "MapPublicIpOnLaunch": false,
-    "Tags": [
-     {
-      "Key": "aws-cdk:subnet-name",
-      "Value": "Isolated"
-     },
-     {
-      "Key": "aws-cdk:subnet-type",
-      "Value": "Isolated"
-     },
-     {
-      "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3"
-     }
-    ],
-    "VpcId": {
-     "Ref": "RdsPostgresStackvpcCBA53F8B"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/Subnet"
-   }
-  },
-  "RdsPostgresStackvpcIsolatedSubnet3RouteTableCE594FE7": {
-   "Type": "AWS::EC2::RouteTable",
-   "Properties": {
-    "Tags": [
-     {
-      "Key": "Name",
-      "Value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3"
-     }
-    ],
-    "VpcId": {
-     "Ref": "RdsPostgresStackvpcCBA53F8B"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTable"
-   }
-  },
-  "RdsPostgresStackvpcIsolatedSubnet3RouteTableAssociation8F9F42D3": {
-   "Type": "AWS::EC2::SubnetRouteTableAssociation",
-   "Properties": {
-    "RouteTableId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet3RouteTableCE594FE7"
-    },
-    "SubnetId": {
-     "Ref": "RdsPostgresStackvpcIsolatedSubnet3SubnetA8B42D7D"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTableAssociation"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/DefaultRoute"
    }
   },
   "RdsPostgresStackvpcIGW59F97FCD": {
@@ -714,7 +692,7 @@
            "Fn::Join": [
             "",
             [
-             "arn:aws:ec2:us-west-2:145423545297:security-group/",
+             "arn:aws:ec2:us-west-1:145423545297:security-group/",
              {
               "Fn::GetAtt": [
                "RdsPostgresStackvpcCBA53F8B",
@@ -739,7 +717,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-2",
+     "S3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-1",
      "S3Key": "e77031893275c08bcaa0a774aa8b611727afd045b3b5d8e1e6f0f04063d9d386.zip"
     },
     "Timeout": 900,
@@ -771,30 +749,27 @@
     "aws:cdk:path": "RdsPostgresStack/ImportBucket/Resource"
    }
   },
-  "RdsPostgresStackrdsSubnetGroupC584F1C3": {
+  "RdsPostgresStackrdsdbSubnetGroup1BC3DC2F": {
    "Type": "AWS::RDS::DBSubnetGroup",
    "Properties": {
-    "DBSubnetGroupDescription": "Subnet group for RdsPostgresStack-rds database",
+    "DBSubnetGroupDescription": "Subnet group for RdsPostgresStack-rdsdb database",
     "SubnetIds": [
      {
       "Ref": "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B"
      },
      {
       "Ref": "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9"
-     },
-     {
-      "Ref": "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/SubnetGroup/Default"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SubnetGroup/Default"
    }
   },
-  "RdsPostgresStackrdsSecurityGroupB18CBF60": {
+  "RdsPostgresStackrdsdbSecurityGroupE71B1767": {
    "Type": "AWS::EC2::SecurityGroup",
    "Properties": {
-    "GroupDescription": "Security group for RdsPostgresStack-rds database",
+    "GroupDescription": "Security group for RdsPostgresStack-rdsdb database",
     "SecurityGroupEgress": [
      {
       "CidrIp": "0.0.0.0/0",
@@ -807,10 +782,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/SecurityGroup/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SecurityGroup/Resource"
    }
   },
-  "RdsPostgresStackrdsS3ImportRole06097A1A": {
+  "RdsPostgresStackrdsdbS3ImportRoleCD20E362": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -827,10 +802,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/Resource"
    }
   },
-  "RdsPostgresStackrdsS3ImportRoleDefaultPolicy63A79C8F": {
+  "RdsPostgresStackrdsdbS3ImportRoleDefaultPolicy40E501AA": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -868,18 +843,18 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "RdsPostgresStackrdsS3ImportRoleDefaultPolicy63A79C8F",
+    "PolicyName": "RdsPostgresStackrdsdbS3ImportRoleDefaultPolicy40E501AA",
     "Roles": [
      {
-      "Ref": "RdsPostgresStackrdsS3ImportRole06097A1A"
+      "Ref": "RdsPostgresStackrdsdbS3ImportRoleCD20E362"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/DefaultPolicy/Resource"
    }
   },
-  "RdsPostgresStackrdsSecret4DFDCAF5": {
+  "RdsPostgresStackrdsdbSecret71BAF509": {
    "Type": "AWS::SecretsManager::Secret",
    "Properties": {
     "Description": {
@@ -903,25 +878,25 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/Secret/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret/Resource"
    }
   },
-  "RdsPostgresStackrdsSecretAttachment8AE06D5F": {
+  "RdsPostgresStackrdsdbSecretAttachmentB034A05E": {
    "Type": "AWS::SecretsManager::SecretTargetAttachment",
    "Properties": {
     "SecretId": {
-     "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+     "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
     },
     "TargetId": {
-     "Ref": "RdsPostgresStackrds1E2F62A7"
+     "Ref": "RdsPostgresStackrdsdb6539CC05"
     },
     "TargetType": "AWS::RDS::DBInstance"
    },
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/Secret/Attachment/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret/Attachment/Resource"
    }
   },
-  "RdsPostgresStackrds1E2F62A7": {
+  "RdsPostgresStackrdsdb6539CC05": {
    "Type": "AWS::RDS::DBInstance",
    "Properties": {
     "AllocatedStorage": "100",
@@ -930,7 +905,7 @@
       "FeatureName": "s3Import",
       "RoleArn": {
        "Fn::GetAtt": [
-        "RdsPostgresStackrdsS3ImportRole06097A1A",
+        "RdsPostgresStackrdsdbS3ImportRoleCD20E362",
         "Arn"
        ]
       }
@@ -939,8 +914,9 @@
     "CopyTagsToSnapshot": true,
     "DBInstanceClass": "db.t3.micro",
     "DBInstanceIdentifier": "rdspostgresstack-rds",
+    "DBName": "carinfords",
     "DBSubnetGroupName": {
-     "Ref": "RdsPostgresStackrdsSubnetGroupC584F1C3"
+     "Ref": "RdsPostgresStackrdsdbSubnetGroup1BC3DC2F"
     },
     "Engine": "postgres",
     "EngineVersion": "15.3",
@@ -950,7 +926,7 @@
       [
        "{{resolve:secretsmanager:",
        {
-        "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+        "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
        },
        ":SecretString:password::}}"
       ]
@@ -962,7 +938,7 @@
       [
        "{{resolve:secretsmanager:",
        {
-        "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+        "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
        },
        ":SecretString:username::}}"
       ]
@@ -973,7 +949,7 @@
     "VPCSecurityGroups": [
      {
       "Fn::GetAtt": [
-       "RdsPostgresStackrdsSecurityGroupB18CBF60",
+       "RdsPostgresStackrdsdbSecurityGroupE71B1767",
        "GroupId"
       ]
      }
@@ -982,13 +958,13 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rds/Resource"
+    "aws:cdk:path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Resource"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12STW+DMAyGf8vuada1l14L1apOOyCoekUmeCxrSKp8tEKI/75A+Oh28pvHjmP8sqG7HV2/wMOsWHldCV7QNrPArsSjvDVb2kaOXdGS+EuOKoQIDHbEbPO2xJtQTY3S0pA6zICAMWgN3fehIwLqogTa+l6f0KC+oDZcSZJxWQm0Sr47yWxPZuFLJ90RDjVtUyWwx0NMlOCs6Y9BdQTZhraXG+vZJYlJ4gqfyFwhw0csKlXO4hmK0C7whfmRFeMwDTEkSKL5HSwuPU7Sovb66OkDmvHR8bS3fpPfwx4yZE5z2xy1crfhuWfQEV0a2h7AQuHXepLGgmRIwjvznUP0DKZq30mHYQ7RdNMbM1BTg4QK9bDysTCEM+gK7dOEc8H/TDf5loves9z/GExwun+YWPDBRjLY63+byvtIYmesqlM0ymkWnJr0Av/UJFrdeYm6Ix9wh9fNmq7p28uP4XylnbS8RpqG+At/S02brwIAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11SQW7CMBB8S+/GpXDhCqRFVFUVAeIabZxt6uLYyF6Doih/rxOTQHua8ex6M9nxjC8WfPoEVzcRxWmiZM6bPYE4sSBljZvzZuXFCYmtv/SNRViBw5a5edYUeFamrlATj6VkFBg4h+T4soOWKajyAngTZn1AjfaI1kmj2V7qUiEZ/ea1oE4ZSWgdeMskVLzZGYWd3GNqlBR1d4ysZShmvDmeRacd0zVLfR4Ke5/r+BN3tjOe8AB5HBf1uxYsGyFhMNEXOvK6TTv4BNoA4RVqllp5CfQ+eKsJbeBDQ3RyOy0prPe7X84ehbeS6o01/tx7eBRaZgvHmwQI8rDrrXYEWiCL3xnvJKtHYegOk2w0k6yGmyGtXnUVaCjR9jncGiMcwJZIDw7Hhv+VdggzU12QWXgtQkm+vLq1kn22rM88vKUyhMvW3pGpduiMtyLGN/C7+KcnteYiC7Qte4cLPM+mfMpfnn6clBPrNckK+S7iL2bwLHDEAgAA"
    },
    "Metadata": {
     "aws:cdk:path": "RdsPostgresStack/CDKMetadata/Default"

@@ -1,0 +1,28 @@
+<!-- <root>
+	<priority value="DEBUG" />
+	<appender-ref ref="file" />
+	<appender-ref ref="console" />
+</root>
+<appender name="console" class="org.apache.log4j.ConsoleAppender">
+	<param name="Target" value="System.out" />
+	<layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
+	</layout>
+</appender> -->
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <File name="FileAppender" fileName="/Users/ntashi/Development/sparc/getstarted/src/main/resources/logfile.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="ERROR">
+            <AppenderRef ref="FileAppender" />
+			<Logger name="software.amazon.awssdk" level="WARN" />
+  			<Logger name="software.amazon.awssdk.request" level="DEBUG" />
+        </Root>
+    </Loggers>
+</Configuration>
