@@ -11,7 +11,7 @@
 </appender> -->
 
 
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
         <File name="FileAppender" fileName="/Users/ntashi/Development/sparc/getstarted/src/main/resources/logfile.log">
@@ -25,4 +25,19 @@
   			<Logger name="software.amazon.awssdk.request" level="DEBUG" />
         </Root>
     </Loggers>
+</Configuration> -->
+
+<Configuration status="WARN">
+ <Appenders>
+ <Console name="ConsoleAppender" target="SYSTEM_OUT">
+ <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c:%L - %m%n" />
+ </Console>
+ </Appenders>
+ <Loggers>
+ <Root level="ERROR">
+ <AppenderRef ref="ConsoleAppender"/>
+ </Root>
+ <Logger name="software.amazon.awssdk" level="WARN" />
+ <Logger name="software.amazon.awssdk.request" level="DEBUG" />
+ </Loggers>
 </Configuration>

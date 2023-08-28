@@ -27,6 +27,8 @@ public class Handler {
     private final RdsClient rdsClient2;
     private static final Logger logger = LoggerFactory.getLogger(Handler.class);
 
+    // create public helper method to figure out given bucket/db, can be called from
+    // other handlers
     public Handler() {
         s3Client1 = DependencyFactory.s3Client1();
         rdsClient2 = DependencyFactory.rdsClient2();
