@@ -27,7 +27,7 @@ public class RdsPostgresApp {
 
                                 .env(Environment.builder()
                                                 .account("145423545297")
-                                                .region("us-west-2")
+                                                .region("us-west-1")
                                                 .build())
 
                                 // For more information, see

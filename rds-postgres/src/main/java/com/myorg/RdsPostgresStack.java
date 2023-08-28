@@ -25,11 +25,10 @@ public class RdsPostgresStack extends Stack {
                 super(scope, id, props);
 
                 // call to create s3 and upload an csv to it
-                Bucket carInfoBucket = addCsv("/Users/ntashi/sparc/rds-postgres/csvfile");
+                Bucket carInfoBucket = addCsv("/Users/ntashi/Development/sparc/rds-postgres/csvfile");
 
                 // creates vpc to pass to db create
                 final Vpc vpc = Vpc.Builder.create(this, id + "-vpc")
-                                .natGateways(0) // Do not create any gateways
                                 .build();
 
                 // creates db engine to pass to db create
@@ -40,6 +39,7 @@ public class RdsPostgresStack extends Stack {
 
                 // creates rds postgres db instance
                 final DatabaseInstance rdsInstance = DatabaseInstance.Builder.create(this, id + "-rdsdb")
+                                .databaseName("carinfords")
                                 .vpc(vpc)
                                 // since subnet is isolated, this instance won't route traffic to the internet
                                 // without other resources in the VPC that are connected
@@ -63,13 +63,13 @@ public class RdsPostgresStack extends Stack {
 
                 // read s3 backup into new dynamodb instance [SDK]
                 // instantiate new dynamodb instance [TO-DO]
-                Table dynamoTable = Table.Builder.create(this, "car-info-dynamo")
-                                .partitionKey(Attribute.builder().name("dol").type(AttributeType.STRING).build())
-                                .billingMode(BillingMode.PAY_PER_REQUEST)
-                                .removalPolicy(RemovalPolicy.DESTROY)
-                                .pointInTimeRecovery(true)
-                                .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
-                                .build();
+                // Table dynamoTable = Table.Builder.create(this, "car-info-dynamo")
+                // .partitionKey(Attribute.builder().name("dol").type(AttributeType.STRING).build())
+                // .billingMode(BillingMode.PAY_PER_REQUEST)
+                // .removalPolicy(RemovalPolicy.DESTROY)
+                // .pointInTimeRecovery(true)
+                // .tableClass(TableClass.STANDARD_INFREQUENT_ACCESS)
+                // .build();
 
                 // table.addLocalSecondaryIndex(LocalSecondaryIndexProps.builder()
                 // .indexName("statusIndex")
@@ -85,7 +85,8 @@ public class RdsPostgresStack extends Stack {
          * Creates bucket and loads given csv into S3; returns such bucket
          */
         private Bucket addCsv(String filepath) {
-                Bucket carInfoBucket = Bucket.Builder.create(this, "car-info-bucket").build();
+                Bucket carInfoBucket = Bucket.Builder.create(this, "car-info-bucket")
+                                .build();
                 BucketDeployment deployment = BucketDeployment.Builder.create(this, "DeployWebsite")
                                 .sources(Collections.singletonList(Source.asset(filepath)))
                                 .destinationBucket(carInfoBucket)

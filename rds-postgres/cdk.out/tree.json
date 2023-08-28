@@ -78,7 +78,7 @@
                       "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
                       "aws:cdk:cloudformation:props": {
                         "content": {
-                          "s3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-2",
+                          "s3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-1",
                           "s3Key": "e2277687077a2abf9ae1af1cc9565e6715e2ebb62f79ec53aa75a1af9298f642.zip"
                         },
                         "description": "/opt/awscli/aws"
@@ -228,8 +228,8 @@
                                   ],
                                   "Effect": "Allow",
                                   "Resource": [
-                                    "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-2",
-                                    "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-2/*"
+                                    "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-1",
+                                    "arn:aws:s3:::cdk-hnb659fds-assets-145423545297-us-west-1/*"
                                   ]
                                 },
                                 {
@@ -330,7 +330,7 @@
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
-                      "s3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-2",
+                      "s3Bucket": "cdk-hnb659fds-assets-145423545297-us-west-1",
                       "s3Key": "9eb41a5505d37607ac419321497a4f8c21cf0ee1f9b4a6b29aa04301aea5c7fd.zip"
                     },
                     "environment": {
@@ -402,8 +402,8 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2a",
-                        "cidrBlock": "10.0.0.0/19",
+                        "availabilityZone": "us-west-1a",
+                        "cidrBlock": "10.0.0.0/18",
                         "mapPublicIpOnLaunch": true,
                         "tags": [
                           {
@@ -497,6 +497,54 @@
                       "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
                       "version": "2.88.0"
                     }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.88.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "RdsPostgresStackvpcPublicSubnet1EIPE5BF720E",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.88.0"
+                    }
                   }
                 },
                 "constructInfo": {
@@ -514,8 +562,8 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2b",
-                        "cidrBlock": "10.0.32.0/19",
+                        "availabilityZone": "us-west-1c",
+                        "cidrBlock": "10.0.64.0/18",
                         "mapPublicIpOnLaunch": true,
                         "tags": [
                           {
@@ -609,6 +657,54 @@
                       "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
                       "version": "2.88.0"
                     }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.88.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "RdsPostgresStackvpcPublicSubnet2EIPE9915A97",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.88.0"
+                    }
                   }
                 },
                 "constructInfo": {
@@ -616,31 +712,31 @@
                   "version": "2.88.0"
                 }
               },
-              "PublicSubnet3": {
-                "id": "PublicSubnet3",
-                "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3",
+              "PrivateSubnet1": {
+                "id": "PrivateSubnet1",
+                "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/Subnet",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2c",
-                        "cidrBlock": "10.0.64.0/19",
-                        "mapPublicIpOnLaunch": true,
+                        "availabilityZone": "us-west-1a",
+                        "cidrBlock": "10.0.128.0/18",
+                        "mapPublicIpOnLaunch": false,
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "Public"
+                            "value": "Private"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
-                            "value": "Public"
+                            "value": "Private"
                           },
                           {
                             "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3"
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1"
                           }
                         ],
                         "vpcId": {
@@ -655,7 +751,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/Acl",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.88.0"
@@ -663,14 +759,14 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTable",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3"
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1"
                           }
                         ],
                         "vpcId": {
@@ -685,15 +781,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/RouteTableAssociation",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC"
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet1RouteTableF435602C"
                         },
                         "subnetId": {
-                          "Ref": "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE"
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet1Subnet640B57BA"
                         }
                       }
                     },
@@ -704,16 +800,16 @@
                   },
                   "DefaultRoute": {
                     "id": "DefaultRoute",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PublicSubnet3/DefaultRoute",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet1/DefaultRoute",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Route",
                       "aws:cdk:cloudformation:props": {
                         "destinationCidrBlock": "0.0.0.0/0",
-                        "gatewayId": {
-                          "Ref": "RdsPostgresStackvpcIGW59F97FCD"
+                        "natGatewayId": {
+                          "Ref": "RdsPostgresStackvpcPublicSubnet1NATGatewayBC96B730"
                         },
                         "routeTableId": {
-                          "Ref": "RdsPostgresStackvpcPublicSubnet3RouteTable292170FC"
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet1RouteTableF435602C"
                         }
                       }
                     },
@@ -724,127 +820,35 @@
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
-                  "version": "2.88.0"
-                }
-              },
-              "IsolatedSubnet1": {
-                "id": "IsolatedSubnet1",
-                "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1",
-                "children": {
-                  "Subnet": {
-                    "id": "Subnet",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/Subnet",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
-                      "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2a",
-                        "cidrBlock": "10.0.96.0/19",
-                        "mapPublicIpOnLaunch": false,
-                        "tags": [
-                          {
-                            "key": "aws-cdk:subnet-name",
-                            "value": "Isolated"
-                          },
-                          {
-                            "key": "aws-cdk:subnet-type",
-                            "value": "Isolated"
-                          },
-                          {
-                            "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1"
-                          }
-                        ],
-                        "vpcId": {
-                          "Ref": "RdsPostgresStackvpcCBA53F8B"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
-                      "version": "2.88.0"
-                    }
-                  },
-                  "Acl": {
-                    "id": "Acl",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/Acl",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.88.0"
-                    }
-                  },
-                  "RouteTable": {
-                    "id": "RouteTable",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTable",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
-                      "aws:cdk:cloudformation:props": {
-                        "tags": [
-                          {
-                            "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1"
-                          }
-                        ],
-                        "vpcId": {
-                          "Ref": "RdsPostgresStackvpcCBA53F8B"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
-                      "version": "2.88.0"
-                    }
-                  },
-                  "RouteTableAssociation": {
-                    "id": "RouteTableAssociation",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet1/RouteTableAssociation",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
-                      "aws:cdk:cloudformation:props": {
-                        "routeTableId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet1RouteTable210D1FD3"
-                        },
-                        "subnetId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet1Subnet367BEA97"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
-                      "version": "2.88.0"
-                    }
-                  }
-                },
-                "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
                   "version": "2.88.0"
                 }
               },
-              "IsolatedSubnet2": {
-                "id": "IsolatedSubnet2",
-                "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2",
+              "PrivateSubnet2": {
+                "id": "PrivateSubnet2",
+                "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/Subnet",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2b",
-                        "cidrBlock": "10.0.128.0/19",
+                        "availabilityZone": "us-west-1c",
+                        "cidrBlock": "10.0.192.0/18",
                         "mapPublicIpOnLaunch": false,
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "Isolated"
+                            "value": "Private"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
-                            "value": "Isolated"
+                            "value": "Private"
                           },
                           {
                             "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2"
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2"
                           }
                         ],
                         "vpcId": {
@@ -859,7 +863,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/Acl",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.88.0"
@@ -867,14 +871,14 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTable",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2"
+                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2"
                           }
                         ],
                         "vpcId": {
@@ -889,15 +893,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet2/RouteTableAssociation",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet2RouteTableD4E28503"
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet2RouteTableF7F6AF50"
                         },
                         "subnetId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet2SubnetBFBE5E46"
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet2Subnet2453B644"
                         }
                       }
                     },
@@ -905,96 +909,24 @@
                       "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
                       "version": "2.88.0"
                     }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
-                  "version": "2.88.0"
-                }
-              },
-              "IsolatedSubnet3": {
-                "id": "IsolatedSubnet3",
-                "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3",
-                "children": {
-                  "Subnet": {
-                    "id": "Subnet",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/Subnet",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
-                      "aws:cdk:cloudformation:props": {
-                        "availabilityZone": "us-west-2c",
-                        "cidrBlock": "10.0.160.0/19",
-                        "mapPublicIpOnLaunch": false,
-                        "tags": [
-                          {
-                            "key": "aws-cdk:subnet-name",
-                            "value": "Isolated"
-                          },
-                          {
-                            "key": "aws-cdk:subnet-type",
-                            "value": "Isolated"
-                          },
-                          {
-                            "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3"
-                          }
-                        ],
-                        "vpcId": {
-                          "Ref": "RdsPostgresStackvpcCBA53F8B"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
-                      "version": "2.88.0"
-                    }
                   },
-                  "Acl": {
-                    "id": "Acl",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/Acl",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.88.0"
-                    }
-                  },
-                  "RouteTable": {
-                    "id": "RouteTable",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTable",
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/PrivateSubnet2/DefaultRoute",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
                       "aws:cdk:cloudformation:props": {
-                        "tags": [
-                          {
-                            "key": "Name",
-                            "value": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3"
-                          }
-                        ],
-                        "vpcId": {
-                          "Ref": "RdsPostgresStackvpcCBA53F8B"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
-                      "version": "2.88.0"
-                    }
-                  },
-                  "RouteTableAssociation": {
-                    "id": "RouteTableAssociation",
-                    "path": "RdsPostgresStack/RdsPostgresStack-vpc/IsolatedSubnet3/RouteTableAssociation",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
-                      "aws:cdk:cloudformation:props": {
-                        "routeTableId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet3RouteTableCE594FE7"
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "RdsPostgresStackvpcPublicSubnet2NATGateway946C059F"
                         },
-                        "subnetId": {
-                          "Ref": "RdsPostgresStackvpcIsolatedSubnet3SubnetA8B42D7D"
+                        "routeTableId": {
+                          "Ref": "RdsPostgresStackvpcPrivateSubnet2RouteTableF7F6AF50"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
                       "version": "2.88.0"
                     }
                   }
@@ -1122,30 +1054,27 @@
               "version": "2.88.0"
             }
           },
-          "RdsPostgresStack-rds": {
-            "id": "RdsPostgresStack-rds",
-            "path": "RdsPostgresStack/RdsPostgresStack-rds",
+          "RdsPostgresStack-rdsdb": {
+            "id": "RdsPostgresStack-rdsdb",
+            "path": "RdsPostgresStack/RdsPostgresStack-rdsdb",
             "children": {
               "SubnetGroup": {
                 "id": "SubnetGroup",
-                "path": "RdsPostgresStack/RdsPostgresStack-rds/SubnetGroup",
+                "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SubnetGroup",
                 "children": {
                   "Default": {
                     "id": "Default",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/SubnetGroup/Default",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SubnetGroup/Default",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::RDS::DBSubnetGroup",
                       "aws:cdk:cloudformation:props": {
-                        "dbSubnetGroupDescription": "Subnet group for RdsPostgresStack-rds database",
+                        "dbSubnetGroupDescription": "Subnet group for RdsPostgresStack-rdsdb database",
                         "subnetIds": [
                           {
                             "Ref": "RdsPostgresStackvpcPublicSubnet1Subnet77A07D2B"
                           },
                           {
                             "Ref": "RdsPostgresStackvpcPublicSubnet2SubnetC802B7D9"
-                          },
-                          {
-                            "Ref": "RdsPostgresStackvpcPublicSubnet3Subnet5CA697CE"
                           }
                         ]
                       }
@@ -1163,15 +1092,15 @@
               },
               "SecurityGroup": {
                 "id": "SecurityGroup",
-                "path": "RdsPostgresStack/RdsPostgresStack-rds/SecurityGroup",
+                "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SecurityGroup",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/SecurityGroup/Resource",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/SecurityGroup/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
                       "aws:cdk:cloudformation:props": {
-                        "groupDescription": "Security group for RdsPostgresStack-rds database",
+                        "groupDescription": "Security group for RdsPostgresStack-rdsdb database",
                         "securityGroupEgress": [
                           {
                             "cidrIp": "0.0.0.0/0",
@@ -1197,11 +1126,11 @@
               },
               "S3ImportRole": {
                 "id": "S3ImportRole",
-                "path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole",
+                "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole",
                 "children": {
                   "ImportS3ImportRole": {
                     "id": "ImportS3ImportRole",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/ImportS3ImportRole",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/ImportS3ImportRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.88.0"
@@ -1209,7 +1138,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/Resource",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -1234,11 +1163,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/DefaultPolicy",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "RdsPostgresStack/RdsPostgresStack-rds/S3ImportRole/DefaultPolicy/Resource",
+                        "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/S3ImportRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -1277,10 +1206,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "RdsPostgresStackrdsS3ImportRoleDefaultPolicy63A79C8F",
+                            "policyName": "RdsPostgresStackrdsdbS3ImportRoleDefaultPolicy40E501AA",
                             "roles": [
                               {
-                                "Ref": "RdsPostgresStackrdsS3ImportRole06097A1A"
+                                "Ref": "RdsPostgresStackrdsdbS3ImportRoleCD20E362"
                               }
                             ]
                           }
@@ -1304,11 +1233,11 @@
               },
               "Secret": {
                 "id": "Secret",
-                "path": "RdsPostgresStack/RdsPostgresStack-rds/Secret",
+                "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/Secret/Resource",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::SecretsManager::Secret",
                       "aws:cdk:cloudformation:props": {
@@ -1338,19 +1267,19 @@
                   },
                   "Attachment": {
                     "id": "Attachment",
-                    "path": "RdsPostgresStack/RdsPostgresStack-rds/Secret/Attachment",
+                    "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret/Attachment",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "RdsPostgresStack/RdsPostgresStack-rds/Secret/Attachment/Resource",
+                        "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Secret/Attachment/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SecretsManager::SecretTargetAttachment",
                           "aws:cdk:cloudformation:props": {
                             "secretId": {
-                              "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+                              "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
                             },
                             "targetId": {
-                              "Ref": "RdsPostgresStackrds1E2F62A7"
+                              "Ref": "RdsPostgresStackrdsdb6539CC05"
                             },
                             "targetType": "AWS::RDS::DBInstance"
                           }
@@ -1374,7 +1303,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "RdsPostgresStack/RdsPostgresStack-rds/Resource",
+                "path": "RdsPostgresStack/RdsPostgresStack-rdsdb/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::RDS::DBInstance",
                   "aws:cdk:cloudformation:props": {
@@ -1383,7 +1312,7 @@
                       {
                         "roleArn": {
                           "Fn::GetAtt": [
-                            "RdsPostgresStackrdsS3ImportRole06097A1A",
+                            "RdsPostgresStackrdsdbS3ImportRoleCD20E362",
                             "Arn"
                           ]
                         },
@@ -1393,8 +1322,9 @@
                     "copyTagsToSnapshot": true,
                     "dbInstanceClass": "db.t3.micro",
                     "dbInstanceIdentifier": "rdspostgresstack-rds",
+                    "dbName": "carinfords",
                     "dbSubnetGroupName": {
-                      "Ref": "RdsPostgresStackrdsSubnetGroupC584F1C3"
+                      "Ref": "RdsPostgresStackrdsdbSubnetGroup1BC3DC2F"
                     },
                     "engine": "postgres",
                     "engineVersion": "15.3",
@@ -1404,7 +1334,7 @@
                         [
                           "{{resolve:secretsmanager:",
                           {
-                            "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+                            "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
                           },
                           ":SecretString:username::}}"
                         ]
@@ -1416,7 +1346,7 @@
                         [
                           "{{resolve:secretsmanager:",
                           {
-                            "Ref": "RdsPostgresStackrdsSecret4DFDCAF5"
+                            "Ref": "RdsPostgresStackrdsdbSecret71BAF509"
                           },
                           ":SecretString:password::}}"
                         ]
@@ -1427,7 +1357,7 @@
                     "vpcSecurityGroups": [
                       {
                         "Fn::GetAtt": [
-                          "RdsPostgresStackrdsSecurityGroupB18CBF60",
+                          "RdsPostgresStackrdsdbSecurityGroupE71B1767",
                           "GroupId"
                         ]
                       }

@@ -31,7 +31,7 @@ public class Handler {
     public void sendRequest() {
         // AmazonS3Client s3Connection = new AmazonS3Client(credentials);
         Bucket targetBucket = null;
-        String bucketId = "car-info-bucket";
+        String bucketId = "carinfobucket";
 
         // find bucket containing csv to be written
         ListBucketsRequest listBucketsRequest = ListBucketsRequest.builder().build();
@@ -48,7 +48,7 @@ public class Handler {
         RdsClient rdsClient = RdsClient.builder().build();
 
         // Example code for interacting with RDS
-        String databaseId = "-rdsdb";
+        String databaseId = "rdspostgresstack";
 
         // Describe RDS instances
         DescribeDbInstancesRequest describeRequest = DescribeDbInstancesRequest.builder().build();
@@ -83,15 +83,35 @@ public class Handler {
                 "electric_util_desc VARCHAR(200)," +
                 "census_2020_tract BIGINT," +
                 "longitude REAL," +
-                "latitude REAL," +
+                "latitude REAL" +
                 ")";
 
-        // execute statement to build table in postgres
-        ExecuteStatementRequest executeStatementRequest = ExecuteStatementRequest.builder()
-                .database(targetDatabase.dbName())
-                .sql(createTableSql)
-                .build();
+        System.out.println("target db: " + targetDatabase.dbName());
+        System.out.flush();
+        System.out.println("targetBucket: " + targetBucket.name());
+        System.out.flush();
 
+        // execute statement to build table in postgres
+        // ExecuteStatementRequest executeStatementRequest =
+        // ExecuteStatementRequest.builder()
+        // .database(targetDatabase.dbName())
+        // .sql(createTableSql)
+        // .build();
+
+        String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
+                + targetDatabase.dbName();
+        System.out.println("JDBC: " + jdbcURL);
+        System.out.flush();
+
+        try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(createTableSql);
+            } catch (SQLException e) {
+                // add exception handling
+            }
+        } catch (SQLException e) {
+            // add exception handling
+        }
         // add wait command for above logic
 
         streamS3ToRds(targetDatabase, targetBucket);
@@ -165,44 +185,5 @@ public class Handler {
         String columns = "column1, column2, column3"; // Adjust column names
         String values = "'" + rowData[0] + "', '" + rowData[1] + "', '" + rowData[2] + "'"; // Adjust values
         return "INSERT INTO carInfo (" + columns + ") VALUES (" + values + ")";
-    }
-
-    // RELIC
-    public static void createBucket(S3Client s3Client, String bucketName) {
-        try {
-            s3Client.createBucket(CreateBucketRequest
-                    .builder()
-                    .bucket(bucketName)
-                    .build());
-            System.out.println("Creating bucket: " + bucketName);
-            s3Client.waiter().waitUntilBucketExists(HeadBucketRequest.builder()
-                    .bucket(bucketName)
-                    .build());
-            System.out.println(bucketName + " is ready.");
-            System.out.printf("%n");
-        } catch (S3Exception e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
-            System.exit(1);
-        }
-    }
-
-    // RELIC
-    public static void cleanUp(S3Client s3Client, String bucketName, String keyName) {
-        System.out.println("Cleaning up...");
-        try {
-            System.out.println("Deleting object: " + keyName);
-            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(bucketName).key(keyName)
-                    .build();
-            s3Client.deleteObject(deleteObjectRequest);
-            System.out.println(keyName + " has been deleted.");
-            System.out.println("Deleting bucket: " + bucketName);
-            DeleteBucketRequest deleteBucketRequest = DeleteBucketRequest.builder().bucket(bucketName).build();
-            s3Client.deleteBucket(deleteBucketRequest);
-            System.out.println(bucketName + " has been deleted.");
-            System.out.printf("%n");
-        } catch (S3Exception e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
-            System.exit(1);
-        }
     }
 }
