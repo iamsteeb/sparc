@@ -1,11 +1,14 @@
 package org.example;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
 //import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
@@ -33,6 +36,25 @@ public class Handler {
     }
 
     public void sendRequest() {
+
+        /////////////////
+        // FOR TESTING - change output to logger for debugging
+        String filePath = "/Users/ntashi/Development/sparc/getstarted/src/main/resources/logfile.log";
+        FileOutputStream fileOutputStream = null;
+        PrintStream printStream = null;
+        try {
+            // Create a FileOutputStream to write to the specified file
+            fileOutputStream = new FileOutputStream(filePath);
+
+            // Create a PrintStream from the FileOutputStream
+            printStream = new PrintStream(fileOutputStream);
+
+            // Redirect the standard output to the PrintStream
+            System.setOut(printStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /////////////////
         // AmazonS3Client s3Connection = new AmazonS3Client(credentials);
         Bucket targetBucket = null;
         String bucketId = "carinfobucket";
@@ -47,9 +69,6 @@ public class Handler {
                 break;
             }
         }
-
-        // Create an RDS client
-        // RdsClient rdsClient = RdsClient.builder().build();
 
         // Example code for interacting with RDS
         String databaseId = "rdspostgresstack";
@@ -70,7 +89,6 @@ public class Handler {
 
         // prepare query to create table in postgresql
         String createTableSql = "CREATE TABLE carInfo (" +
-                "id SERIAL," +
                 "dol INT UNIQUE," +
                 "county VARCHAR(24)," +
                 "city VARCHAR(48)," +
@@ -90,12 +108,12 @@ public class Handler {
                 "latitude REAL" +
                 ")";
 
-        // System.out.println("target db: " + targetDatabase.dbName());
+        System.out.println("target db: " + targetDatabase.dbName());
         // System.out.flush();
-        // System.out.println("targetBucket: " + targetBucket.name());
+        System.out.println("targetBucket: " + targetBucket.name());
         // System.out.flush();
-        logger.debug("target db: " + targetDatabase.dbInstanceIdentifier());
-        logger.debug("targetBucket: " + targetBucket.name());
+        // logger.debug("target db: " + targetDatabase.dbInstanceIdentifier());
+        // logger.debug("targetBucket: " + targetBucket.name());
 
         // execute statement to build table in postgres
         // ExecuteStatementRequest executeStatementRequest =
@@ -106,9 +124,9 @@ public class Handler {
 
         String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
                 + targetDatabase.dbName();
-        // System.out.println("JDBC: " + jdbcURL);
-        // System.out.flush();
-        logger.debug("JDBC: " + jdbcURL);
+        System.out.println("JDBC: " + jdbcURL);
+        System.out.flush();
+        // logger.debug("JDBC: " + jdbcURL);
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
             try (Statement statement = connection.createStatement()) {
@@ -125,6 +143,13 @@ public class Handler {
 
         s3Client1.close();
         rdsClient1.close();
+        try {
+            printStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /*
@@ -189,8 +214,11 @@ public class Handler {
 
     // Generate SQL INSERT query
     private static String generateInsertQuery(String[] rowData) {
-        String columns = "column1, column2, column3"; // Adjust column names
-        String values = "'" + rowData[0] + "', '" + rowData[1] + "', '" + rowData[2] + "'"; // Adjust values
+        String columns = "dol, county, city, state, postal_code, model_year, make, model, ev_type, cafv, electric_range, base_msrp, district_num, electric_util_desc, census_2020_tract, longitude, latitude";
+        String values = "'" + rowData[0] + "', '" + rowData[1] + "', '" + rowData[2] + "', '" + rowData[3] + "', '"
+                + rowData[4] + "', '" + rowData[5] + "', '" + rowData[6] + "', '" + rowData[7] + "', '" + rowData[8]
+                + "', '" + rowData[9] + "', '" + rowData[10] + "', '" + rowData[11] + "', '" + rowData[12] + "', '"
+                + rowData[13] + "', '" + rowData[14] + "', '" + rowData[15] + "', '" + rowData[16] + "', '" + "'";
         return "INSERT INTO carInfo (" + columns + ") VALUES (" + values + ")";
     }
 }

@@ -1,0 +1,3 @@
+target db: carinfords
+targetBucket: rdspostgresstack-carinfobucketcdc1325c-1rb3j25ywrigr
+JDBC: jdbc:postgresql://Endpoint(Address=rdspostgresstack-rds.cfvkh7nujnjr.us-west-1.rds.amazonaws.com, Port=5432, HostedZoneId=Z10WI91S59XXQN):0/carinfords
