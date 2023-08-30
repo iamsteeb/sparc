@@ -13,8 +13,6 @@ import software.amazon.awssdk.regions.Region;
 public class DependencyFactory {
     final static Region r1 = Region.US_WEST_1;
     final static Region r2 = Region.US_WEST_2;
-    final static String accessKey = "AKIASDW7LGPI5TO6SIE3";
-    final static String secretKey = "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";
 
     private DependencyFactory() {
     }
@@ -24,8 +22,8 @@ public class DependencyFactory {
      */
     public static S3Client s3Client1() {
         return S3Client.builder()
-                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
                 .httpClientBuilder(ApacheHttpClient.builder())
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .region(r1)
                 .build();
     }
@@ -45,7 +43,7 @@ public class DependencyFactory {
      */
     public static RdsClient rdsClient1() {
         return RdsClient.builder()
-                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .region(r1)
                 .build();
     }

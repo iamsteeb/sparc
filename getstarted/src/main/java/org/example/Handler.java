@@ -4,11 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
-
-//import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
@@ -16,14 +13,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import software.amazon.awssdk.core.ResponseInputStream;
-//import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.*;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.rds.*;
 import software.amazon.awssdk.services.rds.model.*;
-//import software.amazon.awssdk.services.rdsdata.*;
-//import software.amazon.awssdk.services.rdsdata.model.ExecuteStatementRequest;
-//import software.amazon.awssdk.awscore.exception.*;
 
 public class Handler {
     private final S3Client s3Client1;
@@ -55,7 +48,7 @@ public class Handler {
             e.printStackTrace();
         }
         /////////////////
-        // AmazonS3Client s3Connection = new AmazonS3Client(credentials);
+
         Bucket targetBucket = null;
         String bucketId = "carinfobucket";
 
@@ -108,38 +101,23 @@ public class Handler {
                 "latitude REAL" +
                 ")";
 
-        System.out.println("target db: " + targetDatabase.dbName());
-        // System.out.flush();
-        System.out.println("targetBucket: " + targetBucket.name());
-        // System.out.flush();
-        // logger.debug("target db: " + targetDatabase.dbInstanceIdentifier());
-        // logger.debug("targetBucket: " + targetBucket.name());
-
-        // execute statement to build table in postgres
-        // ExecuteStatementRequest executeStatementRequest =
-        // ExecuteStatementRequest.builder()
-        // .database(targetDatabase.dbName())
-        // .sql(createTableSql)
-        // .build();
-
-        String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
+        String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint().address() + ":"
+                + targetDatabase.endpoint().port() + "/"
                 + targetDatabase.dbName();
-        System.out.println("JDBC: " + jdbcURL);
-        System.out.flush();
-        // logger.debug("JDBC: " + jdbcURL);
 
-        try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(jdbcURL, "postgres", "password");
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(createTableSql);
             } catch (SQLException e) {
-                // add exception handling
+                e.printStackTrace();
             }
         } catch (SQLException e) {
-            // add exception handling
+            e.printStackTrace();
         }
-        // add wait command for above logic
 
-        streamS3ToRds(targetDatabase, targetBucket);
+        streamS3ToRds(targetDatabase, targetBucket, connection);
 
         s3Client1.close();
         rdsClient1.close();
@@ -154,15 +132,11 @@ public class Handler {
 
     /*
      * Streams csv file located in s3 bucket to database instance
-     * Source:
-     * https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-select.html
-     * https://stackoverflow.com/questions/49284704/how-do-i-use-a-outputstream-
-     * object-to-insert-records-in-a-database
      */
-    public void streamS3ToRds(DBInstance targetDatabase, Bucket s3) {
+    public void streamS3ToRds(DBInstance targetDatabase, Bucket s3, Connection connection) {
         // String selectQuery = "SELECT * FROM S3Object";
         final String bucketName = s3.name();
-        final String objectKey = "carInfoThousandRows.csv";
+        final String objectKey = "carInfo.csv";
 
         // ~~GET DATA FROM S3~~
         // Request to filter the contents of an Amazon S3 object
@@ -175,23 +149,14 @@ public class Handler {
 
         // ~~IMPORT DATA TO RDS~~
         // Generate and execute 'insert' queries
-        String jdbcURL = "jdbc:postgresql://" + targetDatabase.endpoint() + ":" + targetDatabase.dbInstancePort() + "/"
-                + targetDatabase.dbName();
-        // should be:
-        // jdbc:postgresql://t16-db1.cqewj0ljgvkk.us-east-2.rds.amazonaws.com:3306/t16-db1
-        try (Connection connection = DriverManager.getConnection(jdbcURL, "postgres", "password")) {
-            for (String[] rowData : parsedData) {
-                String insertQuery = generateInsertQuery(rowData);
-                try (Statement statement = connection.createStatement()) {
-                    statement.executeQuery(insertQuery);
-                } catch (SQLException e) {
-                    // add exception handling
-                    continue;
-                }
-                connection.close();
+        for (int i = 1; i < parsedData.size(); i++) {
+            String insertQuery = generateInsertQuery(parsedData.get(i));
+            System.out.println(insertQuery);
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(insertQuery);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            // add exception handling
         }
     }
 
@@ -218,7 +183,7 @@ public class Handler {
         String values = "'" + rowData[0] + "', '" + rowData[1] + "', '" + rowData[2] + "', '" + rowData[3] + "', '"
                 + rowData[4] + "', '" + rowData[5] + "', '" + rowData[6] + "', '" + rowData[7] + "', '" + rowData[8]
                 + "', '" + rowData[9] + "', '" + rowData[10] + "', '" + rowData[11] + "', '" + rowData[12] + "', '"
-                + rowData[13] + "', '" + rowData[14] + "', '" + rowData[15] + "', '" + rowData[16] + "', '" + "'";
+                + rowData[13] + "', '" + rowData[14] + "', '" + rowData[15] + "', '" + rowData[16] + "'";
         return "INSERT INTO carInfo (" + columns + ") VALUES (" + values + ")";
     }
 }
