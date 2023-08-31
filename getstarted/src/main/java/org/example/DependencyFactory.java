@@ -1,6 +1,7 @@
 
 package org.example;
 
+import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.rds.RdsClient;
@@ -17,17 +18,18 @@ public class DependencyFactory {
     }
 
     /**
-     * @return an instance of S3Client in region us east 1
+     * @return an instance of S3Client in region us east 2
      */
     public static S3Client s3Client1() {
         return S3Client.builder()
                 .httpClientBuilder(ApacheHttpClient.builder())
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .region(r1)
                 .build();
     }
 
     /**
-     * @return an instance of S3Client in region us east 2
+     * @return an instance of S3Client in region us west 2
      */
     // public static S3Client s3Client2() {
     // return S3Client.builder()
@@ -37,10 +39,11 @@ public class DependencyFactory {
     // }
 
     /**
-     * @return an instance of rdsClient in region us east 1
+     * @return an instance of rdsClient in region us east 2
      */
     public static RdsClient rdsClient1() {
         return RdsClient.builder()
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .region(r1)
                 .build();
     }

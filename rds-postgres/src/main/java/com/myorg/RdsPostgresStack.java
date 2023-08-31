@@ -4,7 +4,7 @@ import software.constructs.Construct;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
+//import java.util.Map;
 
 import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
@@ -14,7 +14,7 @@ import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.s3.*;
 import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.Source;
-import software.amazon.awscdk.services.dynamodb.*;
+//import software.amazon.awscdk.services.dynamodb.*;
 
 public class RdsPostgresStack extends Stack {
         public RdsPostgresStack(final Construct scope, final String id) {
